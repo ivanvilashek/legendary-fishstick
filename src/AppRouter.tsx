@@ -1,18 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import NotFound from './pages/NotFound';
+import { Login, NotFound } from './pages';
 import App from './App';
 
 const AppRouter = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  );
+  return <BrowserRouter></BrowserRouter>;
 };
 
 export default AppRouter;

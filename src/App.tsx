@@ -1,7 +1,8 @@
+import AppRouter from './AppRouter';
 import './App.css';
 
 function App() {
-  return <h1 style={{ textAlign: 'center' }}>Home Page</h1>;
+  return <AppRouter />;
 }
 
 export default App;
