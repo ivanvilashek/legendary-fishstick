@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 
-function Login() {
+const Login = () => {
   return (
     <Form
       labelCol={{ span: 8 }}
@@ -39,6 +39,6 @@ function Login() {
       </Form.Item>
     </Form>
   );
-}
+};
 
 export default Login;
