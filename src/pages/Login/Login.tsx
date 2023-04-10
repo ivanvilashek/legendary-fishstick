@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 
-const Login = () => {
+export const Login = () => {
   return (
     <Form
       labelCol={{ span: 8 }}
@@ -40,5 +40,3 @@ const Login = () => {
     </Form>
   );
 };
-
-export default Login;
