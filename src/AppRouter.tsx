@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Login, NotFound } from './pages';
+import { Home, Login, NotFound } from './pages';
 import { ROUTES } from './constants';
 
 const AppRouter = () => {
@@ -8,7 +8,7 @@ const AppRouter = () => {
       <Routes>
         <Route
           path={ROUTES.HOME}
-          Component={() => <h1 style={{ textAlign: 'center' }}>Home Page</h1>}
+          Component={() => <Home />}
         />
         <Route path={ROUTES.LOGIN} Component={() => <Login />} />
         <Route path={ROUTES.NOT_FOUND} Component={() => <NotFound />} />
