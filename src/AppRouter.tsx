@@ -7,11 +7,11 @@ const AppRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route
-          path={ROUTES.home}
+          path={ROUTES.HOME}
           Component={() => <h1 style={{ textAlign: 'center' }}>Home Page</h1>}
         />
-        <Route path={ROUTES.login} Component={() => <Login />} />
-        <Route path={ROUTES.notFound} Component={() => <NotFound />} />
+        <Route path={ROUTES.LOGIN} Component={() => <Login />} />
+        <Route path={ROUTES.NOT_FOUND} Component={() => <NotFound />} />
       </Routes>
     </BrowserRouter>
   );
