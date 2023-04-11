@@ -10,7 +10,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
 
   const submitHandler = () => {
-    localStorage.setItem("token", true);
+    localStorage.setItem("token", "true");
     navigate(ROUTES.HOME)
   };
 
