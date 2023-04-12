@@ -1,20 +1,20 @@
-import { Typography, Space, Button } from "antd";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../constants";
+import { Typography, Space, Button } from 'antd';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants';
 
 const { Title } = Typography;
 
 export const Home = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    if (!JSON.parse(localStorage.getItem("token") || "false")) {
+    if (!JSON.parse(localStorage.getItem('token') || 'false')) {
       navigate(ROUTES.LOGIN);
     }
   });
 
   const logoutHandler = () => {
-    localStorage.setItem("token", "false");
+    localStorage.setItem('token', 'false');
     navigate(ROUTES.LOGIN);
   };
 
