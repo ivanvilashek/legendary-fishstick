@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Space, Typography } from 'antd';
 import { ROUTES } from '../../constants';
@@ -8,21 +9,24 @@ const { Title } = Typography;
 
 export const Register = () => {
   const navigate = useNavigate();
-
   const [form] = Form.useForm();
+  const auth = getAuth();
 
   useEffect(() => {
     document.title = 'Register';
   }, []);
 
-  const submitHandler = (value: any) => {
-    console.log(value);
+  const registerHandler = (value: any) => {
+    const auth = getAuth();
+
+    createUserWithEmailAndPassword(auth, value?.email, value?.password);
+    navigate(ROUTES.HOME);
   };
 
   return (
     <Form
       form={form}
-      onFinish={submitHandler}
+      onFinish={registerHandler}
       style={{ maxWidth: '400px', minWidth: '300px' }}
     >
       <Title level={1} style={{ color: '#1677ff', textAlign: 'center' }}>

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Typography } from 'antd';
 import { ROUTES } from '../../constants';
@@ -15,15 +16,20 @@ export const Login = () => {
     document.title = 'Login';
   }, []);
 
-  const submitHandler = () => {
-    localStorage.setItem('token', 'true');
-    navigate(ROUTES.HOME);
+  const loginHandler = (values: any) => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, values.email, values.password)
+      .then(() => {
+        localStorage.setItem('token', 'true');
+        navigate(ROUTES.HOME);
+      })
+      .catch(console.error);
   };
 
   return (
     <Form
       form={form}
-      onFinish={submitHandler}
+      onFinish={loginHandler}
       initialValues={{ remember: true }}
       style={{ maxWidth: '400px', minWidth: '300px' }}
     >
