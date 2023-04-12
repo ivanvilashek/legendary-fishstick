@@ -11,7 +11,8 @@ export const Home = () => {
     if (!JSON.parse(localStorage.getItem('token') || 'false')) {
       navigate(ROUTES.LOGIN);
     }
-  });
+    document.title = 'Home';
+  }, []);
 
   const logoutHandler = () => {
     localStorage.setItem('token', 'false');
@@ -19,7 +20,7 @@ export const Home = () => {
   };
 
   return (
-    <Space size={24} align="center" direction="vertical">
+    <Space align="center" direction="vertical">
       <Title level={1}>Home page</Title>
       <Button type="primary" onClick={logoutHandler}>
         Logout
