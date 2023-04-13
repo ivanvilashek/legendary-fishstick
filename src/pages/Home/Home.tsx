@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { Typography, Space, Button, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { ROUTES } from '../../constants';
@@ -27,7 +27,9 @@ export const Home = () => {
 
   const logoutHandler = () => {
     localStorage.setItem('token', 'false');
-    navigate(ROUTES.LOGIN);
+    signOut(auth)
+      .then(() => navigate(ROUTES.LOGIN))
+      .catch(console.error);
   };
 
   console.log(auth);
