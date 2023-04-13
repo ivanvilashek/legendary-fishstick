@@ -10,6 +10,7 @@ import {
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Space, Typography } from 'antd';
 import { ROUTES } from '../../constants';
+import { FormRule } from '../../types';
 
 const { Title } = Typography;
 
@@ -22,16 +23,13 @@ export const Register = () => {
     document.title = 'Register';
   }, []);
 
-  const registerHandler = (value: any) => {
-    const auth = getAuth();
-
+  const registerHandler = (value: FormRule) => {
     setPersistence(auth, browserLocalPersistence)
       .then(() =>
         createUserWithEmailAndPassword(auth, value.email, value.password)
           .then((data) => {
             updateProfile(data.user, { displayName: value.username })
               .then(() => {
-                localStorage.setItem('token', 'true');
                 navigate(ROUTES.HOME);
               })
               .catch(console.error);

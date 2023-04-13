@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   getAuth,
@@ -9,6 +9,7 @@ import {
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Typography, message } from 'antd';
 import { ROUTES } from '../../constants';
+import { FormRule } from '../../types';
 
 const { Title } = Typography;
 
@@ -21,14 +22,13 @@ export const Login = () => {
     document.title = 'Login';
   }, []);
 
-  const loginHandler = (values: any) => {
+  const loginHandler = (values: FormRule) => {
     const auth = getAuth();
 
     setPersistence(auth, browserLocalPersistence)
       .then(() =>
         signInWithEmailAndPassword(auth, values.email, values.password)
           .then(() => {
-            localStorage.setItem('token', 'true');
             navigate(ROUTES.HOME);
           })
           .catch((e) => {
