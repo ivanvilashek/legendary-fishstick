@@ -1,6 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  setPersistence,
+  browserLocalPersistence,
+} from 'firebase/auth';
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Space, Typography } from 'antd';
 import { ROUTES } from '../../constants';
@@ -19,8 +25,20 @@ export const Register = () => {
   const registerHandler = (value: any) => {
     const auth = getAuth();
 
-    createUserWithEmailAndPassword(auth, value?.email, value?.password);
-    navigate(ROUTES.HOME);
+    setPersistence(auth, browserLocalPersistence)
+      .then(() =>
+        createUserWithEmailAndPassword(auth, value.email, value.password)
+          .then((data) => {
+            updateProfile(data.user, { displayName: value.username })
+              .then(() => {
+                localStorage.setItem('token', 'true');
+                navigate(ROUTES.HOME);
+              })
+              .catch(console.error);
+          })
+          .catch(console.error)
+      )
+      .catch(console.error);
   };
 
   return (
