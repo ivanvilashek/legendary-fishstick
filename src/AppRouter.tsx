@@ -1,22 +1,32 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Home, Login, Register, NotFound } from './pages';
+import {
+  Home,
+  Login,
+  Register,
+  Settings,
+  Dashboard,
+  Currency,
+  NotFound,
+} from './pages';
+import { PrivateRoute, SpecialRoute } from './hoc';
 import { ROUTES } from './constants';
 
-const AppRouter = (props: { isSignIn: boolean }) => {
-  const { isSignIn } = props;
-
+const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path={ROUTES.HOME}
-          Component={() => (isSignIn ? <Home /> : <Login />)}
-        />
-        <Route
-          path={ROUTES.LOGIN}
-          Component={() => (isSignIn ? <Home /> : <Login />)}
-        />
-        <Route path={ROUTES.REGISTER} Component={() => <Register />} />
+        <Route element={<PrivateRoute />}>
+          <Route path={ROUTES.HOME} Component={() => <Home />} />
+          <Route path={ROUTES.DASHBOARD} Component={() => <Dashboard />} />
+          <Route path={ROUTES.CURRENCY} Component={() => <Currency />} />
+          <Route path={ROUTES.SETTINGS} Component={() => <Settings />} />
+        </Route>
+
+        <Route element={<SpecialRoute />}>
+          <Route path={ROUTES.LOGIN} Component={() => <Login />} />
+          <Route path={ROUTES.REGISTER} Component={() => <Register />} />
+        </Route>
+
         <Route path={ROUTES.NOT_FOUND} Component={() => <NotFound />} />
       </Routes>
     </BrowserRouter>

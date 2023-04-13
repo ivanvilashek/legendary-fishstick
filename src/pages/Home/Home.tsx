@@ -1,35 +1,16 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
-import { User, getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { Typography, Space, Button, Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
-import { ROUTES } from '../../constants';
+import { getAuth, signOut } from 'firebase/auth';
+import { Typography, Space, Button } from 'antd';
+import { useAuth } from '../../hook';
 
 const { Title } = Typography;
-const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 export const Home = () => {
-  const navigate = useNavigate();
   const auth = getAuth();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    document.title = 'Home';
-
-    onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-  }, []);
+  const user = useAuth();
 
   const logoutHandler = () => {
-    signOut(auth)
-      .then(() => navigate(ROUTES.LOGIN))
-      .catch(console.error);
+    signOut(auth).catch(console.error);
   };
-
-  if (loading) return <Spin indicator={loadingIcon} tip="Loading..." />;
 
   return (
     <Space align="center" direction="vertical">
