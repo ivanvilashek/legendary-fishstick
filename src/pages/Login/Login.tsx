@@ -10,6 +10,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Typography, message } from 'antd';
 import { ROUTES } from '../../constants';
 import { FormRule } from '../../types';
+import './Login.css';
 
 const { Title } = Typography;
 
@@ -43,13 +44,13 @@ export const Login = () => {
   };
 
   return (
-    <>
+    <div className="wrapper">
       {contextHolder}
       <Form
+        className="form"
         form={form}
         onFinish={loginHandler}
         initialValues={{ remember: true }}
-        style={{ maxWidth: '400px', minWidth: '300px' }}
       >
         <Title level={1} style={{ color: '#1677ff', textAlign: 'center' }}>
           Log in
@@ -93,6 +94,6 @@ export const Login = () => {
           </Link>
         </Form.Item>
       </Form>
-    </>
+    </div>
   );
 };

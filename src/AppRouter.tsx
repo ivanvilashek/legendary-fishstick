@@ -10,16 +10,19 @@ import {
 } from './pages';
 import { PrivateRoute, SpecialRoute } from './hoc';
 import { ROUTES } from './constants';
+import { PageLayout } from './components';
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<PrivateRoute />}>
-          <Route path={ROUTES.HOME} Component={() => <Home />} />
-          <Route path={ROUTES.DASHBOARD} Component={() => <Dashboard />} />
-          <Route path={ROUTES.CURRENCY} Component={() => <Currency />} />
-          <Route path={ROUTES.SETTINGS} Component={() => <Settings />} />
+          <Route element={<PageLayout />}>
+            <Route path={ROUTES.HOME} Component={() => <Home />} />
+            <Route path={ROUTES.DASHBOARD} Component={() => <Dashboard />} />
+            <Route path={ROUTES.CURRENCY} Component={() => <Currency />} />
+            <Route path={ROUTES.SETTINGS} Component={() => <Settings />} />
+          </Route>
         </Route>
 
         <Route element={<SpecialRoute />}>
