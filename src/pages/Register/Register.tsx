@@ -8,40 +8,54 @@ import {
   browserLocalPersistence,
 } from 'firebase/auth';
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Space, Typography } from 'antd';
+import { Button, Form, Input, Space, Typography, message } from 'antd';
 import { ROUTES } from '../../constants';
 import { FormRule } from '../../types';
+import { Rule } from 'antd/es/form';
 
 const { Title } = Typography;
 
 export const Register = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
   const auth = getAuth();
 
   useEffect(() => {
     document.title = 'Register';
   }, []);
 
-  const registerHandler = (value: FormRule) => {
-    setPersistence(auth, browserLocalPersistence)
-      .then(() =>
-        createUserWithEmailAndPassword(auth, value.email, value.password)
-          .then((data) => {
-            updateProfile(data.user, { displayName: value.username })
-              .then(() => {
-                navigate(ROUTES.HOME);
-              })
-              .catch(console.error);
-          })
-          .catch(console.error)
-      )
-      .catch(console.error);
+  const registerHandler = async (value: FormRule) => {
+    try {
+      await setPersistence(auth, browserLocalPersistence);
+      const data = await createUserWithEmailAndPassword(
+        auth,
+        value.email,
+        value.password
+      );
+      await updateProfile(data.user, { displayName: value.username });
+      navigate(ROUTES.HOME);
+    } catch (e) {
+      if (e instanceof Error) {
+        message.error(e.message, 3);
+      }
+    }
+  };
+
+  const validatePasswords = (rule: Rule, value: String) => {
+    return !value || form.getFieldValue('password') === value
+      ? Promise.resolve()
+      : Promise.reject(new Error('Passwords do not match'));
   };
 
   return (
     <div className="wrapper">
-      <Form className="form" form={form} onFinish={registerHandler}>
+      {contextHolder}
+      <Form
+        className="form"
+        form={form}
+        onFinish={(value) => registerHandler(value)}
+      >
         <Title level={1} style={{ color: '#1677ff', textAlign: 'center' }}>
           Register
         </Title>
@@ -86,14 +100,7 @@ export const Register = () => {
         <Form.Item
           name="confirm"
           rules={[
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error('Passwords do not match'));
-              },
-            }),
+            { validator: validatePasswords },
             { required: true, message: 'Please confirm your password' },
           ]}
           dependencies={['password']}

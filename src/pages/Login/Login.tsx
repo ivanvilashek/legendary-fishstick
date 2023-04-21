@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   getAuth,
@@ -23,24 +23,18 @@ export const Login = () => {
     document.title = 'Login';
   }, []);
 
-  const loginHandler = (values: FormRule) => {
+  const loginHandler = async (values: FormRule) => {
     const auth = getAuth();
 
-    setPersistence(auth, browserLocalPersistence)
-      .then(() =>
-        signInWithEmailAndPassword(auth, values.email, values.password)
-          .then(() => {
-            navigate(ROUTES.HOME);
-          })
-          .catch((e) => {
-            messageApi.open({
-              type: 'error',
-              content: e.message,
-              duration: 3,
-            });
-          })
-      )
-      .catch(console.error);
+    try {
+      await setPersistence(auth, browserLocalPersistence);
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      navigate(ROUTES.HOME);
+    } catch (e) {
+      if (e instanceof Error) {
+        message.error(e.message, 3);
+      }
+    }
   };
 
   return (
