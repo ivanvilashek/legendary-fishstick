@@ -1,22 +1,16 @@
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import styles from './Loading.module.scss';
 
-const loadingIcon = (
+const LoadingIcon = () => (
   <LoadingOutlined style={{ fontSize: 48, fontWeight: 500 }} spin />
 );
 
 export const Loading = () => (
-  <div
-    style={{
-      height: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}
-  >
+  <div className={styles.loadingWrapper}>
     <Spin
-      indicator={loadingIcon}
-      style={{ color: '#fff', fontSize: 20 }}
+      className={styles.spinIndicator}
+      indicator={<LoadingIcon />}
       tip="Loading..."
     />
   </div>

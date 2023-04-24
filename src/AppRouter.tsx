@@ -10,7 +10,7 @@ import {
 } from './pages';
 import { PrivateRoute, SpecialRoute } from './hoc';
 import { ROUTES } from './constants';
-import { PageLayout } from './components';
+import { PageLayout } from './layout';
 
 const AppRouter = () => {
   return (

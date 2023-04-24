@@ -1,0 +1,21 @@
+.navBar {
+  background: none;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 16px;
+
+  .logo {
+    height: 32px;
+    margin-right: 16px;
+  }
+}
