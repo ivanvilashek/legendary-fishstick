@@ -15,12 +15,12 @@ export const NavBar = ({ children }: React.PropsWithChildren) => {
       <Button
         size="large"
         shape="round"
-        className={styles.button}
         type="primary"
         icon={<MenuOutlined />}
         onClick={openDrawer}
       />
       <Drawer
+        placement="left"
         bodyStyle={{ padding: 0 }}
         closable={false}
         width={200}
