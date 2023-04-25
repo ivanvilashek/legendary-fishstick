@@ -4,11 +4,11 @@ import { useAuth } from '../hook';
 import { Loading } from '../components';
 
 export const SpecialRoute = () => {
-  const user = useAuth();
+  const { currentUser } = useAuth();
 
-  return typeof user === 'undefined' ? (
+  return typeof currentUser === 'undefined' ? (
     <Loading />
-  ) : user ? (
+  ) : currentUser ? (
     <Navigate to={ROUTES.HOME} replace />
   ) : (
     <Outlet />

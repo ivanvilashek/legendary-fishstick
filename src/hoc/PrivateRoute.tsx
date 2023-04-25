@@ -4,11 +4,11 @@ import { useAuth } from '../hook';
 import { Loading } from '../components';
 
 export const PrivateRoute = () => {
-  const user = useAuth();
+  const { currentUser } = useAuth();
 
-  return typeof user === 'undefined' ? (
+  return typeof currentUser === 'undefined' ? (
     <Loading />
-  ) : user ? (
+  ) : currentUser ? (
     <Outlet />
   ) : (
     <Navigate to={ROUTES.LOGIN} replace />

@@ -4,7 +4,7 @@ import { SideBar, NavBar, TopicMenu } from '../../components';
 import styles from './PageLayout.module.scss';
 import { useResponsive } from '../../hook';
 
-const { Content } = Layout;
+const { Content, Header } = Layout;
 
 export const PageLayout = () => {
   const { isTablet } = useResponsive();

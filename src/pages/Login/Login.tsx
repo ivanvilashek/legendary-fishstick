@@ -1,21 +1,16 @@
 import { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  setPersistence,
-  browserLocalPersistence,
-} from 'firebase/auth';
+import { Link } from 'react-router-dom';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Typography, message } from 'antd';
 import { ROUTES } from '../../constants';
-import { FormRule } from '../../types';
-import './Login.css';
+import { useAuth } from '../../hook';
+import styles from './Login.module.scss';
 
 const { Title } = Typography;
 
 export const Login = () => {
-  const navigate = useNavigate();
+  const { signIn } = useAuth();
+
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
 
@@ -23,30 +18,16 @@ export const Login = () => {
     document.title = 'Login';
   }, []);
 
-  const loginHandler = async (values: FormRule) => {
-    const auth = getAuth();
-
-    try {
-      await setPersistence(auth, browserLocalPersistence);
-      await signInWithEmailAndPassword(auth, values.email, values.password);
-      navigate(ROUTES.HOME);
-    } catch (e) {
-      if (e instanceof Error) {
-        message.error(e.message, 3);
-      }
-    }
-  };
-
   return (
     <div className="wrapper">
       {contextHolder}
       <Form
         className="form"
         form={form}
-        onFinish={loginHandler}
+        onFinish={signIn}
         initialValues={{ remember: true }}
       >
-        <Title level={1} style={{ color: '#1677ff', textAlign: 'center' }}>
+        <Title level={1} className="formTitle">
           Log in
         </Title>
         <Form.Item
@@ -60,7 +41,7 @@ export const Login = () => {
           ]}
         >
           <Input
-            prefix={<UserOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+            prefix={<UserOutlined className="inputIcon" />}
             placeholder="Email"
           />
         </Form.Item>
@@ -70,7 +51,7 @@ export const Login = () => {
           rules={[{ required: true, message: 'Please enter your password' }]}
         >
           <Input.Password
-            prefix={<LockOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+            prefix={<LockOutlined className="inputIcon" />}
             placeholder="Password"
           />
         </Form.Item>
@@ -79,11 +60,15 @@ export const Login = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button style={{ width: '100%' }} type="primary" htmlType="submit">
+          <Button
+            className={styles.submitButton}
+            type="primary"
+            htmlType="submit"
+          >
             Log in
           </Button>
           Or <Link to={ROUTES.REGISTER}>register now!</Link>
-          <Link to="" style={{ float: 'right' }}>
+          <Link to="" className={styles.forgotLink}>
             Forgot password
           </Link>
         </Form.Item>

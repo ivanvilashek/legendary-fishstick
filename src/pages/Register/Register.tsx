@@ -1,46 +1,23 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-  setPersistence,
-  browserLocalPersistence,
-} from 'firebase/auth';
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Space, Typography, message } from 'antd';
+import { useAuth } from '../../hook';
 import { ROUTES } from '../../constants';
-import { FormRule } from '../../types';
 import { Rule } from 'antd/es/form';
 
 const { Title } = Typography;
 
 export const Register = () => {
+  const { signUp } = useAuth();
+
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const auth = getAuth();
 
   useEffect(() => {
     document.title = 'Register';
   }, []);
-
-  const registerHandler = async (value: FormRule) => {
-    try {
-      await setPersistence(auth, browserLocalPersistence);
-      const data = await createUserWithEmailAndPassword(
-        auth,
-        value.email,
-        value.password
-      );
-      await updateProfile(data.user, { displayName: value.username });
-      navigate(ROUTES.HOME);
-    } catch (e) {
-      if (e instanceof Error) {
-        message.error(e.message, 3);
-      }
-    }
-  };
 
   const validatePasswords = (rule: Rule, value: String) => {
     return !value || form.getFieldValue('password') === value
@@ -51,12 +28,8 @@ export const Register = () => {
   return (
     <div className="wrapper">
       {contextHolder}
-      <Form
-        className="form"
-        form={form}
-        onFinish={(value) => registerHandler(value)}
-      >
-        <Title level={1} style={{ color: '#1677ff', textAlign: 'center' }}>
+      <Form className="form" form={form} onFinish={signUp}>
+        <Title level={1} className="formTitle">
           Register
         </Title>
 
@@ -65,7 +38,7 @@ export const Register = () => {
           rules={[{ required: true, message: 'Please enter your name' }]}
         >
           <Input
-            prefix={<UserOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+            prefix={<UserOutlined className="inputIcon" />}
             placeholder="Name"
           />
         </Form.Item>
@@ -81,7 +54,7 @@ export const Register = () => {
           ]}
         >
           <Input
-            prefix={<MailOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+            prefix={<MailOutlined className="inputIcon" />}
             placeholder="Email"
           />
         </Form.Item>
@@ -92,7 +65,7 @@ export const Register = () => {
           hasFeedback
         >
           <Input.Password
-            prefix={<LockOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+            prefix={<LockOutlined className="inputIcon" />}
             placeholder="Password"
           />
         </Form.Item>
@@ -107,7 +80,7 @@ export const Register = () => {
           hasFeedback
         >
           <Input.Password
-            prefix={<LockOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+            prefix={<LockOutlined className="inputIcon" />}
             placeholder="Confirm your password"
           />
         </Form.Item>
