@@ -1,29 +1,15 @@
-import { Typography, Space, Button } from "antd";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../constants";
+import { Typography, Space } from 'antd';
+import { useAppSelector } from '../../hook';
 
 const { Title } = Typography;
 
 export const Home = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!JSON.parse(localStorage.getItem("token") || "false")) {
-      navigate(ROUTES.LOGIN);
-    }
-  });
-
-  const logoutHandler = () => {
-    localStorage.setItem("token", "false");
-    navigate(ROUTES.LOGIN);
-  };
+  const user = useAppSelector((state) => state.user);
 
   return (
-    <Space size={24} align="center" direction="vertical">
+    <Space align="center" direction="vertical">
       <Title level={1}>Home page</Title>
-      <Button type="primary" onClick={logoutHandler}>
-        Logout
-      </Button>
+      <Title level={2}>{user.displayName}</Title>
     </Space>
   );
 };

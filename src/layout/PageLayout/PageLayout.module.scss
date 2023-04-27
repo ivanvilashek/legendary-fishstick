@@ -1,0 +1,11 @@
+.pageLayout {
+  height: 100vh;
+
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 20px;
+    padding: 30px;
+  }
+}

@@ -1,70 +1,78 @@
-import { Button, Checkbox, Form, Input } from "antd";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {ROUTES} from "../../constants"
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Typography, message } from 'antd';
+import { ROUTES } from '../../constants';
+import { useAuth } from '../../hook';
+import styles from './Login.module.scss';
+
+const { Title } = Typography;
 
 export const Login = () => {
-  const navigate = useNavigate(); 
-  
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { signIn } = useAuth();
 
-  const submitHandler = () => {
-    localStorage.setItem("token", "true");
-    navigate(ROUTES.HOME)
-  };
+  const [messageApi, contextHolder] = message.useMessage();
+  const [form] = Form.useForm();
 
-  const emailHandler = (e: any) => {
-    setEmail(e.target.value);
-  };
-
-  const passwordHandler = (e: any) => {
-    setPassword(e.target.value);
-  };
+  useEffect(() => {
+    document.title = 'Login';
+  }, []);
 
   return (
-    <Form
-    onFinish={submitHandler}
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      initialValues={{ remember: true }}
-      style={{ maxWidth: 600 }}
-    >
-      <Form.Item
-        label="Email"
-        name="email"
-        rules={[
-          {
-            pattern: new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/gi),
-            message: "Incorrect email",
-          },
-          { required: true, message: "Please enter your email" },
-        ]}
+    <div className="wrapper">
+      {contextHolder}
+      <Form
+        className="form"
+        form={form}
+        onFinish={signIn}
+        initialValues={{ remember: true }}
       >
-        <Input value={email} onChange={emailHandler} />
-      </Form.Item>
+        <Title level={1} className="formTitle">
+          Log in
+        </Title>
+        <Form.Item
+          name="email"
+          rules={[
+            {
+              type: 'email',
+              message: 'Incorrect email',
+            },
+            { required: true, message: 'Please enter your email' },
+          ]}
+        >
+          <Input
+            prefix={<UserOutlined className="inputIcon" />}
+            placeholder="Email"
+          />
+        </Form.Item>
 
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: "Please enter your password" }]}
-      >
-        <Input.Password value={password} onChange={passwordHandler} />
-      </Form.Item>
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: 'Please enter your password' }]}
+        >
+          <Input.Password
+            prefix={<LockOutlined className="inputIcon" />}
+            placeholder="Password"
+          />
+        </Form.Item>
+        <Form.Item name="remember" valuePropName="checked" noStyle>
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item>
 
-      <Form.Item
-        name="remember"
-        valuePropName="checked"
-        wrapperCol={{ offset: 8, span: 16 }}
-      >
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
-
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item>
+          <Button
+            className={styles.submitButton}
+            type="primary"
+            htmlType="submit"
+          >
+            Log in
+          </Button>
+          Or <Link to={ROUTES.REGISTER}>register now!</Link>
+          <Link to="" className={styles.forgotLink}>
+            Forgot password
+          </Link>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
