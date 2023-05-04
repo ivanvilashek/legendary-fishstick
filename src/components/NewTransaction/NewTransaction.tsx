@@ -78,7 +78,10 @@ export const NewTransaction = () => {
           },
         ]}
       />
-      <Form form={form} initialValues={{ category: 'education' }}>
+      <Form
+        form={form}
+        initialValues={{ category: 'education', date: dayjs() }}
+      >
         <List className={styles.list}>
           <List.Item>
             <List.Item.Meta
@@ -105,13 +108,14 @@ export const NewTransaction = () => {
               className={styles.meta}
               avatar={<Avatar size={35} icon={<CalendarOutlined />} />}
               description={
-                <DatePicker
-                  defaultValue={dayjs()}
-                  format={'D MMM, YYYY'}
-                  allowClear={false}
-                  bordered={false}
-                  suffixIcon={false}
-                />
+                <Form.Item noStyle name="date">
+                  <DatePicker
+                    format={'D MMM, YYYY'}
+                    allowClear={false}
+                    bordered={false}
+                    suffixIcon={false}
+                  />
+                </Form.Item>
               }
             />
           </List.Item>
@@ -120,11 +124,13 @@ export const NewTransaction = () => {
               className={styles.meta}
               avatar={<Avatar size={35} icon={<FormOutlined />} />}
               description={
-                <Input.TextArea
-                  placeholder="Enter the description"
-                  autoSize
-                  bordered={false}
-                />
+                <Form.Item noStyle name="description">
+                  <Input.TextArea
+                    placeholder="Enter the description"
+                    autoSize
+                    bordered={false}
+                  />
+                </Form.Item>
               }
             />
           </List.Item>
