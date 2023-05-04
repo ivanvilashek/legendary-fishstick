@@ -7,7 +7,6 @@ import {
 } from '@ant-design/icons';
 import { ROUTES } from '../../../constants';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../../hook';
 
 export const menuItems = [
   {

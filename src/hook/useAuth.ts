@@ -4,18 +4,22 @@ import {
   User,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
+  signInWithPopup,
   signInWithEmailAndPassword,
   updateProfile,
   setPersistence,
   browserLocalPersistence,
   signOut,
   getAuth,
+  GoogleAuthProvider,
 } from 'firebase/auth';
 import { ROUTES } from '../constants';
 import { FormRule } from '../types';
 import { useAppDispatch } from './';
 import { message } from 'antd';
 import { setUser, removeUser } from '../store/slices/userSlice';
+
+const provider = new GoogleAuthProvider();
 
 export const useAuth = () => {
   const [currentUser, setCurrentUser] = useState<User | null | undefined>();
@@ -28,7 +32,7 @@ export const useAuth = () => {
       setCurrentUser(user);
     });
     return unsubscribe;
-  }, []);
+  }, [auth]);
 
   const signUp = async (value: FormRule) => {
     try {
@@ -56,9 +60,27 @@ export const useAuth = () => {
     }
   };
 
-  const signIn = async (values: FormRule) => {
-    const auth = getAuth();
+  const signInWithGoogle = async () => {
+    try {
+      const data = await signInWithPopup(auth, provider);
+      const accessToken = await data.user.getIdToken();
+      dispatch(
+        setUser({
+          displayName: data.user.displayName,
+          email: data.user.email,
+          id: data.user.uid,
+          token: accessToken,
+        })
+      );
+      navigate(ROUTES.HOME);
+    } catch (e) {
+      if (e instanceof Error) {
+        message.error(e.message, 3);
+      }
+    }
+  };
 
+  const signIn = async (values: FormRule) => {
     try {
       await setPersistence(auth, browserLocalPersistence);
       const data = await signInWithEmailAndPassword(
@@ -92,5 +114,5 @@ export const useAuth = () => {
     }
   };
 
-  return { currentUser, signUp, logOut, signIn };
+  return { currentUser, signUp, logOut, signIn, signInWithGoogle };
 };

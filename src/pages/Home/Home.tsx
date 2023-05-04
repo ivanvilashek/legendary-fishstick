@@ -1,4 +1,5 @@
 import { Typography, Space } from 'antd';
+import { NewTransaction } from '../../components';
 import { useAppSelector } from '../../hook';
 
 const { Title } = Typography;
@@ -10,6 +11,7 @@ export const Home = () => {
     <Space align="center" direction="vertical">
       <Title level={1}>Home page</Title>
       <Title level={2}>{user.displayName}</Title>
+      <NewTransaction />
     </Space>
   );
 };

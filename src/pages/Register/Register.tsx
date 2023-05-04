@@ -1,7 +1,12 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Space, Typography, message } from 'antd';
+import { Link } from 'react-router-dom';
+import {
+  LockOutlined,
+  UserOutlined,
+  MailOutlined,
+  GoogleOutlined,
+} from '@ant-design/icons';
+import { Button, Form, Input, Space, Typography } from 'antd';
 import { useAuth } from '../../hook';
 import { ROUTES } from '../../constants';
 import { Rule } from 'antd/es/form';
@@ -9,11 +14,9 @@ import { Rule } from 'antd/es/form';
 const { Title } = Typography;
 
 export const Register = () => {
-  const { signUp } = useAuth();
+  const { signUp, signInWithGoogle } = useAuth();
 
-  const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     document.title = 'Register';
@@ -27,7 +30,6 @@ export const Register = () => {
 
   return (
     <div className="wrapper">
-      {contextHolder}
       <Form className="form" form={form} onFinish={signUp}>
         <Title level={1} className="formTitle">
           Register
@@ -90,10 +92,15 @@ export const Register = () => {
             <Button type="primary" htmlType="submit">
               Register
             </Button>
-            <Button type="default" onClick={() => navigate(ROUTES.LOGIN)}>
-              Log in
+            <Button
+              icon={<GoogleOutlined className="googleIcon" />}
+              type="default"
+              onClick={signInWithGoogle}
+            >
+              Sign in with Google
             </Button>
           </Space.Compact>
+          Already have an account? <Link to={ROUTES.LOGIN}>Login</Link>
         </Form.Item>
       </Form>
     </div>
