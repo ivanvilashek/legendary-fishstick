@@ -5,6 +5,10 @@
 .meta {
   align-items: center !important;
 
+  :global(.ant-avatar) {
+    transition: all 0.5s ease;
+  }
+
   :global(.ant-list-item-meta-title) {
     margin: 0 !important;
     line-height: 1.25 !important;
@@ -20,13 +24,15 @@
 
   :global(.ant-picker),
   :global(.ant-select),
-  :global(.ant-select-selector) {
+  :global(.ant-select-selector),
+  :global(.ant-input-number) {
     width: 100%;
     padding: 0 !important;
   }
 
-  :global(.ant-input) {
-    padding: 4px 0;
+  :global(.ant-input),
+  :global(.ant-input-number-input) {
+    padding: 4px 0 !important;
   }
 }
 

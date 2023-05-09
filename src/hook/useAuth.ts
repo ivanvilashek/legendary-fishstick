@@ -13,11 +13,14 @@ import {
   getAuth,
   GoogleAuthProvider,
 } from 'firebase/auth';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../firebase';
 import { ROUTES } from '../constants';
 import { FormRule } from '../types';
 import { useAppDispatch } from './';
 import { message } from 'antd';
 import { setUser, removeUser } from '../store/slices/userSlice';
+import { getTransactions } from '../store/slices/transactionSlice';
 
 const provider = new GoogleAuthProvider();
 
@@ -29,6 +32,14 @@ export const useAuth = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      dispatch(
+        setUser({
+          displayName: user?.displayName,
+          email: user?.email,
+          id: user?.uid,
+        })
+      );
+      dispatch(getTransactions(user?.uid));
       setCurrentUser(user);
     });
     return unsubscribe;
@@ -43,13 +54,11 @@ export const useAuth = () => {
         value.password
       );
       await updateProfile(data.user, { displayName: value.username });
-      const accessToken = await data.user.getIdToken();
       dispatch(
         setUser({
           displayName: data.user.displayName,
           email: data.user.email,
           id: data.user.uid,
-          token: accessToken,
         })
       );
       navigate(ROUTES.HOME);
@@ -63,13 +72,11 @@ export const useAuth = () => {
   const signInWithGoogle = async () => {
     try {
       const data = await signInWithPopup(auth, provider);
-      const accessToken = await data.user.getIdToken();
       dispatch(
         setUser({
           displayName: data.user.displayName,
           email: data.user.email,
           id: data.user.uid,
-          token: accessToken,
         })
       );
       navigate(ROUTES.HOME);
@@ -88,13 +95,11 @@ export const useAuth = () => {
         values.email,
         values.password
       );
-      const accessToken = await data.user.getIdToken();
       dispatch(
         setUser({
           displayName: data.user.displayName,
           email: data.user.email,
           id: data.user.uid,
-          token: accessToken,
         })
       );
       navigate(ROUTES.HOME);
