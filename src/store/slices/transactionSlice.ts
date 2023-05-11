@@ -1,8 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { db } from '../../firebase';
-import { collection, addDoc, getDocs, where, query } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  where,
+  query,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
 
-interface TransactionValue {
+export interface TransactionValue {
   amount: number;
   type: string;
   category: string;
@@ -11,7 +20,7 @@ interface TransactionValue {
   description: string | null;
 }
 
-interface StateValue {
+export interface StateValue {
   id: string;
   data: TransactionValue;
 }
@@ -30,9 +39,28 @@ export const addTransaction = createAsyncThunk(
   }
 );
 
+export const updateTransaction = createAsyncThunk(
+  'transactions/updateTransaction',
+  async (editedTransaction: StateValue) => {
+    await updateDoc(doc(db, 'transactions', editedTransaction.id), {
+      data: editedTransaction.data,
+    });
+    return editedTransaction;
+  }
+);
+
+export const deleteTransaction = createAsyncThunk(
+  'transactions/deleteTransaction',
+  async (id: string) => {
+    await deleteDoc(doc(db, 'transactions', id));
+    return id;
+  }
+);
+
 export const getTransactions = createAsyncThunk(
   'transactions/getTransactions',
-  async (uid: any) => {
+  async (uid: string | undefined) => {
+    if (!uid) return;
     const q = await query(
       collection(db, 'transactions'),
       where('uid', '==', uid)
@@ -54,7 +82,17 @@ const transactionSlice = createSlice({
       .addCase(addTransaction.fulfilled, (state, action) => {
         state.push(action.payload);
       })
-      .addCase(getTransactions.fulfilled, (state, action) => action.payload);
+      .addCase(getTransactions.fulfilled, (state, action) => action.payload)
+      .addCase(deleteTransaction.fulfilled, (state, action) =>
+        state.filter((item) => item.id !== action.payload)
+      )
+      .addCase(updateTransaction.fulfilled, (state, action) => {
+        const { id, data } = action.payload;
+        const index = state.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          state[index] = { id: id, data };
+        }
+      });
   },
 });
 

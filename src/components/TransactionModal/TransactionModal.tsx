@@ -14,26 +14,33 @@ import {
 import { CalendarOutlined, FormOutlined } from '@ant-design/icons';
 import { segmentedOptions, categories } from './constants';
 import { SegmentedValue } from 'antd/es/segmented';
-import { useAppDispatch } from '../../hook';
-import { addTransaction } from '../../store/slices/transactionSlice';
-import styles from './NewTransaction.module.scss';
-import { on } from 'events';
+import { useAppDispatch, useAppSelector } from '../../hook';
+import {
+  StateValue,
+  addTransaction,
+  updateTransaction,
+} from '../../store/slices/transactionSlice';
+import styles from './TransactionModal.module.scss';
+import { TRANSACTION_ACTIONS } from '../../constants';
 
 interface PropsType {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  uid: string | null;
+  transaction: StateValue | null;
+  onClose: () => void;
+  action?: number;
 }
 
-export const NewTransaction = ({ open, setOpen, uid }: PropsType) => {
+export const TransactionModal = (props: PropsType) => {
+  const isAdd = props.action === TRANSACTION_ACTIONS.add;
+  const isEdit = props.action === TRANSACTION_ACTIONS.edit;
+
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user);
 
   const [transactionType, setTransactionType] =
     useState<SegmentedValue>('expense');
   const [CategoryIcon, setCategoryIcon] = useState(
     categories[transactionType][0].icon
   );
-  const [amount, setAmount] = useState<null | number>(25);
 
   const [form] = Form.useForm();
   const transaction = Form.useWatch([], form);
@@ -44,25 +51,45 @@ export const NewTransaction = ({ open, setOpen, uid }: PropsType) => {
     setTransactionType(value);
   };
 
-  const onAmountChange = (value: null | number) => {
-    const reg = new RegExp('/(^([1-9]d*)|0)(.d+)?$/g');
-    if (!value) return;
-    if (reg.test(value?.toString())) setAmount(value);
-  };
-
-  const onCancel = () => setOpen(false);
-
   const onOk = () => {
-    dispatch(
-      addTransaction({
-        ...transaction,
-        date: dayjs(transaction?.date).valueOf(),
-        uid,
-      })
-    );
-    form.resetFields();
-    setOpen(false);
+    if (isAdd)
+      dispatch(
+        addTransaction({
+          ...transaction,
+          date: dayjs(transaction?.date).valueOf(),
+          uid: user.id,
+        })
+      );
+
+    if (isEdit) {
+      if (!props.transaction) return;
+      dispatch(
+        updateTransaction({
+          id: props.transaction.id,
+          data: {
+            ...transaction,
+            date: dayjs(transaction?.date).valueOf(),
+            uid: user.id,
+          },
+        })
+      );
+    }
+
+    closeDialog();
   };
+
+  const closeDialog = () => {
+    props.onClose();
+    form.resetFields();
+  };
+
+  useEffect(() => {
+    if (props.transaction)
+      form.setFieldsValue({
+        ...props.transaction.data,
+        date: dayjs(props.transaction.data.date),
+      });
+  }, [props.transaction]);
 
   useEffect(() => {
     const selected = categories[transactionType].find(
@@ -80,11 +107,11 @@ export const NewTransaction = ({ open, setOpen, uid }: PropsType) => {
 
   return (
     <Modal
-      open={open}
+      open={isAdd || isEdit}
       onOk={onOk}
-      onCancel={onCancel}
-      closable={false}
+      onCancel={closeDialog}
       width={350}
+      closable={false}
     >
       <Form
         form={form}
@@ -145,15 +172,6 @@ export const NewTransaction = ({ open, setOpen, uid }: PropsType) => {
               }
             />
           </List.Item>
-
-          {/* <List.Item>
-            <List.Item.Meta
-              className={styles.meta}
-              avatar={<Avatar size={35} icon={<UserOutlined />} />}
-              description="Готівка"
-              title="З рахунку"
-            />
-          </List.Item> */}
 
           <List.Item>
             <List.Item.Meta

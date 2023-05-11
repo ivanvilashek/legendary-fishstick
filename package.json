@@ -50,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "rc-virtual-list": "^3.4.13",
     "sass": "^1.62.0"
   }
 }
