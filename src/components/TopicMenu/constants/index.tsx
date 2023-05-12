@@ -5,7 +5,7 @@ import {
   SettingOutlined,
   UserDeleteOutlined,
 } from '@ant-design/icons';
-import { ROUTES } from '../../../constants';
+import { ROUTES } from '../../../core/constants';
 import { Link } from 'react-router-dom';
 
 export const menuItems = [

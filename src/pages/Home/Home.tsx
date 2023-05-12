@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { Typography, Space, FloatButton, List, Avatar, App } from 'antd';
+import { Typography, Space, FloatButton, List, Avatar } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import { TransactionModal } from '../../components';
-import { useAppDispatch, useAppSelector } from '../../hook';
+import { useAppDispatch, useAppSelector } from '../../shared/hook';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { categories } from '../../components/TransactionModal/constants';
 import {
   StateValue,
   deleteTransaction,
-} from '../../store/slices/transactionSlice';
-import { TRANSACTION_ACTIONS } from '../../constants';
+} from '../../core/store/slices/transactionSlice';
+import { TRANSACTION_ACTIONS } from '../../core/constants';
 
 const { Title } = Typography;
 

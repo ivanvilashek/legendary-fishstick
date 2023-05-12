@@ -8,9 +8,9 @@ import {
   Currency,
   NotFound,
 } from './pages';
-import { PrivateRoute, SpecialRoute } from './hoc';
-import { ROUTES } from './constants';
-import { PageLayout } from './layout';
+import { PrivateRoute, SpecialRoute } from './shared/hoc';
+import { ROUTES } from './core/constants';
+import { PageLayout } from './shared/layout';
 
 const AppRouter = () => {
   return (

@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LockOutlined, UserOutlined, GoogleOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Space, Typography } from 'antd';
-import { ROUTES } from '../../constants';
-import { useAuth } from '../../hook';
+import { ROUTES } from '../../core/constants';
+import { useAuth } from '../../shared/hook';
 import styles from './Login.module.scss';
 
 const { Title } = Typography;

@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { Layout } from 'antd';
-import { SideBar, NavBar, TopicMenu } from '../../components';
+import { SideBar, NavBar, TopicMenu } from '../../../components';
 import styles from './PageLayout.module.scss';
 import { useResponsive } from '../../hook';
 

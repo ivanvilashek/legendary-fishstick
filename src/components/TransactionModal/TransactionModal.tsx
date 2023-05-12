@@ -14,14 +14,14 @@ import {
 import { CalendarOutlined, FormOutlined } from '@ant-design/icons';
 import { segmentedOptions, categories } from './constants';
 import { SegmentedValue } from 'antd/es/segmented';
-import { useAppDispatch, useAppSelector } from '../../hook';
+import { useAppDispatch, useAppSelector } from '../../shared/hook';
 import {
   StateValue,
   addTransaction,
   updateTransaction,
-} from '../../store/slices/transactionSlice';
+} from '../../core/store/slices/transactionSlice';
 import styles from './TransactionModal.module.scss';
-import { TRANSACTION_ACTIONS } from '../../constants';
+import { TRANSACTION_ACTIONS } from '../../core/constants';
 
 interface PropsType {
   transaction: StateValue | null;
@@ -89,7 +89,7 @@ export const TransactionModal = (props: PropsType) => {
         ...props.transaction.data,
         date: dayjs(props.transaction.data.date),
       });
-  }, [props.transaction]);
+  }, [props.transaction, form]);
 
   useEffect(() => {
     const selected = categories[transactionType].find(

@@ -13,14 +13,12 @@ import {
   getAuth,
   GoogleAuthProvider,
 } from 'firebase/auth';
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../firebase';
-import { ROUTES } from '../constants';
-import { FormRule } from '../types';
-import { useAppDispatch } from './';
+import { ROUTES } from '../../../core/constants';
+import { FormRule } from './types';
+import { useAppDispatch } from '../reduxHooks';
 import { message } from 'antd';
-import { setUser, removeUser } from '../store/slices/userSlice';
-import { getTransactions } from '../store/slices/transactionSlice';
+import { setUser, removeUser } from '../../../core/store/slices/userSlice';
+import { getTransactions } from '../../../core/store/slices/transactionSlice';
 
 const provider = new GoogleAuthProvider();
 
@@ -43,7 +41,7 @@ export const useAuth = () => {
       setCurrentUser(user);
     });
     return unsubscribe;
-  }, [auth]);
+  }, [auth, dispatch]);
 
   const signUp = async (value: FormRule) => {
     try {
