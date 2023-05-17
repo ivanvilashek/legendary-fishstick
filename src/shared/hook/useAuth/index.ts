@@ -13,12 +13,12 @@ import {
   getAuth,
   GoogleAuthProvider,
 } from 'firebase/auth';
-import { ROUTES } from '../../../core/constants';
+import { ROUTES } from 'core/constants';
 import { FormRule } from './types';
-import { useAppDispatch } from '../reduxHooks';
+import { useAppDispatch } from 'shared/hook/reduxHooks';
 import { message } from 'antd';
-import { setUser, removeUser } from '../../../core/store/slices/userSlice';
-import { getTransactions } from '../../../core/store/slices/transactionSlice';
+import { setUser, removeUser } from 'core/store/slices/userSlice';
+import { getTransactions } from 'core/store/slices/transactionSlice';
 
 const provider = new GoogleAuthProvider();
 

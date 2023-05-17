@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { ROUTES } from '../../core/constants';
-import { useAuth } from '../hook';
-import { Loading } from '../../components';
+import { ROUTES } from 'core/constants';
+import { useAuth } from 'shared/hook';
+import { Loading } from 'components';
 
 export const SpecialRoute = () => {
   const { currentUser } = useAuth();

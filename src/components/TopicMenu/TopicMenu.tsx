@@ -1,7 +1,7 @@
 import { Menu, MenuProps } from 'antd';
 import { menuItems } from './constants';
 import styles from './TopicMenu.module.scss';
-import { useAuth } from '../../shared/hook';
+import { useAuth } from 'shared/hook';
 
 export const TopicMenu = () => {
   const { logOut } = useAuth();

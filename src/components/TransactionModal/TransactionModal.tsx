@@ -14,19 +14,20 @@ import {
 import { CalendarOutlined, FormOutlined } from '@ant-design/icons';
 import { segmentedOptions, categories } from './constants';
 import { SegmentedValue } from 'antd/es/segmented';
-import { useAppDispatch, useAppSelector } from '../../shared/hook';
+import { useAppDispatch, useAppSelector } from 'shared/hook';
 import {
   StateValue,
   addTransaction,
   updateTransaction,
-} from '../../core/store/slices/transactionSlice';
+} from 'core/store/slices/transactionSlice';
 import styles from './TransactionModal.module.scss';
-import { TRANSACTION_ACTIONS } from '../../core/constants';
+import { TRANSACTION_ACTIONS } from 'core/constants';
+import { closeModal } from 'core/store/slices/UISlice';
+import { CategoryIcon } from 'components/CategoryIcon';
 
 interface PropsType {
   transaction: StateValue | null;
-  onClose: () => void;
-  action?: number;
+  action: number | null;
 }
 
 export const TransactionModal = (props: PropsType) => {
@@ -38,13 +39,10 @@ export const TransactionModal = (props: PropsType) => {
 
   const [transactionType, setTransactionType] =
     useState<SegmentedValue>('expense');
-  const [CategoryIcon, setCategoryIcon] = useState(
-    categories[transactionType][0].icon
-  );
 
   const [form] = Form.useForm();
   const transaction = Form.useWatch([], form);
-  const selectedItem = Form.useWatch('category', form);
+  const category = Form.useWatch('category', form);
 
   const onTransactionTypeChange = (value: SegmentedValue) => {
     form.setFieldValue('category', categories[value][0].value);
@@ -79,7 +77,7 @@ export const TransactionModal = (props: PropsType) => {
   };
 
   const closeDialog = () => {
-    props.onClose();
+    dispatch(closeModal());
     form.resetFields();
   };
 
@@ -90,20 +88,6 @@ export const TransactionModal = (props: PropsType) => {
         date: dayjs(props.transaction.data.date),
       });
   }, [props.transaction, form]);
-
-  useEffect(() => {
-    const selected = categories[transactionType].find(
-      (item: { value: string }) => item.value === selectedItem
-    );
-    setCategoryIcon(
-      <Avatar
-        size={35}
-        icon={selected?.icon}
-        className={styles.categoryIcon}
-        style={{ background: selected?.color }}
-      />
-    );
-  }, [selectedItem, transactionType]);
 
   return (
     <Modal
@@ -159,7 +143,12 @@ export const TransactionModal = (props: PropsType) => {
           <List.Item>
             <List.Item.Meta
               className={styles.meta}
-              avatar={CategoryIcon}
+              avatar={
+                <CategoryIcon
+                  type={transactionType as string}
+                  category={category}
+                />
+              }
               title={`${transactionType === 'income' ? 'From' : 'To'} category`}
               description={
                 <Form.Item noStyle name="category">

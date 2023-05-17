@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Drawer, Button, Layout } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
-import logo from '../../shared/assets/icons/logo.svg';
+import logo from 'shared/assets/icons/logo.svg';
 import styles from './NavBar.module.scss';
 
 export const NavBar = ({ children }: React.PropsWithChildren) => {

@@ -7,8 +7,8 @@ import {
   GoogleOutlined,
 } from '@ant-design/icons';
 import { Button, Form, Input, Space, Typography } from 'antd';
-import { useAuth } from '../../shared/hook';
-import { ROUTES } from '../../core/constants';
+import { useAuth } from 'shared/hook';
+import { ROUTES } from 'core/constants';
 import { Rule } from 'antd/es/form';
 
 const { Title } = Typography;

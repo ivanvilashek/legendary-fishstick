@@ -1,24 +1,18 @@
-import { useState } from 'react';
 import { Typography, Space, FloatButton, List, Avatar } from 'antd';
 import VirtualList from 'rc-virtual-list';
-import { TransactionModal } from '../../components';
-import { useAppDispatch, useAppSelector } from '../../shared/hook';
+import { useAppDispatch, useAppSelector } from 'shared/hook';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { categories } from '../../components/TransactionModal/constants';
 import {
   StateValue,
   deleteTransaction,
-} from '../../core/store/slices/transactionSlice';
-import { TRANSACTION_ACTIONS } from '../../core/constants';
+} from 'core/store/slices/transactionSlice';
+import { TRANSACTION_ACTIONS } from 'core/constants';
+import { openModal } from 'core/store/slices/UISlice';
+import { CategoryIcon } from 'components/CategoryIcon';
 
 const { Title } = Typography;
 
 export const Home = () => {
-  const [action, setAction] = useState<number>();
-  const [updateTransaction, setUpdateTransaction] = useState<StateValue | null>(
-    null
-  );
-
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
   const transactions = useAppSelector((state) => state.transactions);
@@ -27,42 +21,21 @@ export const Home = () => {
     (a, b) => b.data.date - a.data.date
   );
 
-  const addTransaction = () => setAction(TRANSACTION_ACTIONS.add);
+  const addTransaction = () =>
+    dispatch(openModal({ action: TRANSACTION_ACTIONS.add }));
 
-  const onTransactionModalClose = () => {
-    setAction(TRANSACTION_ACTIONS.none);
-    if (updateTransaction) setUpdateTransaction(null);
-  };
+  const onUpdate = (transaction: StateValue) =>
+    dispatch(openModal({ action: TRANSACTION_ACTIONS.edit, transaction }));
 
-  const onUpdate = (transaction: StateValue) => {
-    setUpdateTransaction(transaction);
-    setAction(TRANSACTION_ACTIONS.edit);
-  };
-
-  const onDelete = (id: string) => {
-    dispatch(deleteTransaction(id));
-  };
-
-  const getCategoryIcon = (item: StateValue) => {
-    const selected = categories[item.data.type].find(
-      (category: { value: string }) => category.value === item.data.category
-    );
-    return (
-      <Avatar
-        size={35}
-        icon={selected?.icon}
-        style={{ background: selected?.color }}
-      />
-    );
-  };
+  const onDelete = (id: string) => dispatch(deleteTransaction(id));
 
   return (
     <Space align="center" direction="vertical">
       <Title level={1}>Home page</Title>
       <Title level={2}>{user.displayName}</Title>
-      <h2>
+      {/* <h2>
         {transactions.reduce((acc, item) => (acc += item.data.amount), 0)}
-      </h2>
+      </h2> */}
       <List
         bordered
         style={{ width: 300, background: '#fff' }}
@@ -87,7 +60,12 @@ export const Home = () => {
               ]}
             >
               <List.Item.Meta
-                avatar={getCategoryIcon(item)}
+                avatar={
+                  <CategoryIcon
+                    type={item.data.type}
+                    category={item.data.category}
+                  />
+                }
                 title={item.data.category}
               />
               <div>{item.data.amount} ₴</div>
@@ -96,11 +74,6 @@ export const Home = () => {
         </VirtualList>
       </List>
 
-      <TransactionModal
-        action={action}
-        transaction={updateTransaction}
-        onClose={onTransactionModalClose}
-      />
       <FloatButton
         onClick={addTransaction}
         type="primary"
