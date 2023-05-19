@@ -12,12 +12,12 @@ import {
 } from 'firebase/firestore';
 
 export interface TransactionValue {
-  amount: number;
+  amount: number | null;
   type: string;
   category: string;
   date: number;
   uid: string;
-  description: string | null;
+  description: string;
 }
 
 export interface StateValue {

@@ -7,7 +7,6 @@ import { useResponsive, useAppSelector } from 'shared/hook';
 const { Content } = Layout;
 
 export const PageLayout = () => {
-  const { action, transaction } = useAppSelector((state) => state.UI.modal);
   const { isTablet } = useResponsive();
 
   return (
@@ -24,7 +23,7 @@ export const PageLayout = () => {
 
       <Content className={styles.content}>
         <Outlet />
-        <TransactionModal action={action} transaction={transaction} />
+        <TransactionModal />
       </Content>
     </Layout>
   );

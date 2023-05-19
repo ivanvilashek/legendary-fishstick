@@ -1,142 +1,79 @@
-import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import {
-  DatePicker,
-  Form,
-  Input,
-  Modal,
-  Segmented,
-  Select,
-  Avatar,
-  List,
-  InputNumber,
-} from 'antd';
+import { Modal, List } from 'antd';
 import { CalendarOutlined, FormOutlined } from '@ant-design/icons';
-import { segmentedOptions, categories } from './constants';
-import { SegmentedValue } from 'antd/es/segmented';
-import { useAppDispatch, useAppSelector } from 'shared/hook';
-import {
-  StateValue,
-  addTransaction,
-  updateTransaction,
-} from 'core/store/slices/transactionSlice';
+import { useAppSelector } from 'shared/hook';
+import { TransactionValue } from 'core/store/slices/transactionSlice';
 import styles from './TransactionModal.module.scss';
-import { TRANSACTION_ACTIONS } from 'core/constants';
-import { closeModal } from 'core/store/slices/UISlice';
 import { CategoryIcon } from 'components/CategoryIcon';
+import {
+  FieldIcon,
+  CategorySelect,
+  DescriptionInput,
+  FormDatePicker,
+  AmountInput,
+  TypeSelect,
+} from './components';
+import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
+import useActions from 'shared/hook/useActions';
 
-interface PropsType {
-  transaction: StateValue | null;
-  action: number | null;
-}
+const initialValues = {
+  amount: null,
+  type: 'expense',
+  category: 'uncategorized',
+  description: '',
+};
 
-export const TransactionModal = (props: PropsType) => {
-  const isAdd = props.action === TRANSACTION_ACTIONS.add;
-  const isEdit = props.action === TRANSACTION_ACTIONS.edit;
+export const TransactionModal = () => {
+  const { user, UI } = useAppSelector((state) => state);
+  const { isOpen, transaction } = UI.modal;
 
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user);
+  const { closeModal, addTransaction, updateTransaction } = useActions();
 
-  const [transactionType, setTransactionType] =
-    useState<SegmentedValue>('expense');
+  const { control, setValue, handleSubmit, reset } = useForm<TransactionValue>({
+    defaultValues: { ...initialValues, date: dayjs().valueOf() },
+    values: transaction?.data,
+  });
 
-  const [form] = Form.useForm();
-  const transaction = Form.useWatch([], form);
-  const category = Form.useWatch('category', form);
+  const formValues = useWatch({ control });
 
-  const onTransactionTypeChange = (value: SegmentedValue) => {
-    form.setFieldValue('category', categories[value][0].value);
-    setTransactionType(value);
+  const closeDialog = () => {
+    reset(initialValues);
+    closeModal();
   };
 
-  const onOk = () => {
-    if (isAdd)
-      dispatch(
-        addTransaction({
-          ...transaction,
-          date: dayjs(transaction?.date).valueOf(),
-          uid: user.id,
-        })
-      );
-
-    if (isEdit) {
-      if (!props.transaction) return;
-      dispatch(
-        updateTransaction({
-          id: props.transaction.id,
-          data: {
-            ...transaction,
-            date: dayjs(transaction?.date).valueOf(),
-            uid: user.id,
-          },
-        })
-      );
+  const onSubmit: SubmitHandler<TransactionValue> = (data) => {
+    if (!transaction) {
+      addTransaction({
+        ...data,
+        uid: user.id as string,
+      });
+    } else {
+      updateTransaction({
+        data: { ...data, uid: user.id as string },
+        id: transaction.id,
+      });
     }
 
     closeDialog();
   };
 
-  const closeDialog = () => {
-    dispatch(closeModal());
-    form.resetFields();
-  };
-
-  useEffect(() => {
-    if (props.transaction)
-      form.setFieldsValue({
-        ...props.transaction.data,
-        date: dayjs(props.transaction.data.date),
-      });
-  }, [props.transaction, form]);
-
   return (
     <Modal
-      open={isAdd || isEdit}
-      onOk={onOk}
+      open={isOpen}
+      onOk={handleSubmit(onSubmit)}
       onCancel={closeDialog}
       width={350}
       closable={false}
     >
-      <Form
-        form={form}
-        initialValues={{
-          amount: null,
-          type: 'expense',
-          category: categories[transactionType][0].value,
-          date: dayjs(),
-          description: null,
-        }}
-      >
-        <Form.Item name="type" noStyle>
-          <Segmented
-            value={transactionType}
-            onChange={onTransactionTypeChange}
-            block
-            options={segmentedOptions}
-          />
-        </Form.Item>
+      <form>
+        <TypeSelect control={control} setValue={setValue} />
+
         <List className={styles.list}>
           <List.Item>
             <List.Item.Meta
               className={styles.meta}
-              avatar={
-                <Avatar
-                  size={35}
-                  style={{ background: transaction?.amount && '#1677FF' }}
-                >
-                  ₴
-                </Avatar>
-              }
-              description={
-                <Form.Item name="amount" noStyle>
-                  <InputNumber
-                    size="small"
-                    bordered={false}
-                    placeholder="Enter the amount"
-                    type="number"
-                  />
-                </Form.Item>
-              }
+              avatar={<FieldIcon value={formValues?.amount}>₴</FieldIcon>}
+              description={<AmountInput control={control} />}
             />
           </List.Item>
 
@@ -145,19 +82,16 @@ export const TransactionModal = (props: PropsType) => {
               className={styles.meta}
               avatar={
                 <CategoryIcon
-                  type={transactionType as string}
-                  category={category}
+                  type={formValues?.type as string}
+                  category={formValues.category as string}
                 />
               }
-              title={`${transactionType === 'income' ? 'From' : 'To'} category`}
+              title={'From category'}
               description={
-                <Form.Item noStyle name="category">
-                  <Select
-                    bordered={false}
-                    size="small"
-                    options={categories[transactionType]}
-                  />
-                </Form.Item>
+                <CategorySelect
+                  type={formValues.type as string}
+                  control={control}
+                />
               }
             />
           </List.Item>
@@ -166,22 +100,12 @@ export const TransactionModal = (props: PropsType) => {
             <List.Item.Meta
               className={styles.meta}
               avatar={
-                <Avatar
-                  size={35}
+                <FieldIcon
                   icon={<CalendarOutlined />}
-                  style={{ background: transaction?.date && '#1677FF' }}
+                  value={formValues?.date}
                 />
               }
-              description={
-                <Form.Item noStyle name="date">
-                  <DatePicker
-                    format={'D MMM, YYYY'}
-                    allowClear={false}
-                    bordered={false}
-                    suffixIcon={false}
-                  />
-                </Form.Item>
-              }
+              description={<FormDatePicker control={control} />}
             />
           </List.Item>
 
@@ -189,25 +113,16 @@ export const TransactionModal = (props: PropsType) => {
             <List.Item.Meta
               className={styles.meta}
               avatar={
-                <Avatar
-                  size={35}
+                <FieldIcon
                   icon={<FormOutlined />}
-                  style={{ background: transaction?.description && '#1677FF' }}
+                  value={formValues?.description}
                 />
               }
-              description={
-                <Form.Item noStyle name="description">
-                  <Input.TextArea
-                    placeholder="Enter the description"
-                    autoSize
-                    bordered={false}
-                  />
-                </Form.Item>
-              }
+              description={<DescriptionInput control={control} />}
             />
           </List.Item>
         </List>
-      </Form>
+      </form>
     </Modal>
   );
 };

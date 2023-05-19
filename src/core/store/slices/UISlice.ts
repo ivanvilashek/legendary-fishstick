@@ -3,14 +3,14 @@ import { StateValue } from './transactionSlice';
 
 interface StateType {
   modal: {
-    action: number | null;
-    transaction: StateValue | null;
+    isOpen: boolean;
+    transaction?: StateValue | null;
   };
 }
 
 const initialState: StateType = {
   modal: {
-    action: null,
+    isOpen: false,
     transaction: null,
   },
 };
@@ -20,15 +20,16 @@ const UISlice = createSlice({
   initialState,
   reducers: {
     openModal(state, action) {
+      console.log(action);
       state.modal = {
-        action: action.payload.action,
-        transaction: action.payload.transaction,
+        isOpen: true,
+        transaction: action.payload ? action.payload : null,
       };
     },
 
     closeModal(state) {
       state.modal = {
-        action: null,
+        isOpen: false,
         transaction: null,
       };
     },
