@@ -17,7 +17,7 @@ export const Home = () => {
     (a, b) => b.data.date - a.data.date
   );
 
-  const addTransaction = () => openModal();
+  const addTransaction = () => openModal(null);
 
   const onUpdate = (transaction: StateValue) => openModal(transaction);
 

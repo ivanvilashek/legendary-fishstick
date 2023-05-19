@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { StateValue } from './transactionSlice';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { StateValue, TransactionValue } from './transactionSlice';
 
 interface StateType {
   modal: {
@@ -19,11 +19,11 @@ const UISlice = createSlice({
   name: 'UI',
   initialState,
   reducers: {
-    openModal(state, action) {
+    openModal(state, action: PayloadAction<StateValue | null>) {
       console.log(action);
       state.modal = {
         isOpen: true,
-        transaction: action.payload ? action.payload : null,
+        transaction: action.payload,
       };
     },
 

@@ -15,7 +15,8 @@ import { useAppDispatch } from 'shared/hook';
 const useActions = () => {
   const dispatch = useAppDispatch();
 
-  const openModal = <P>(payload?: P) => dispatch(openModalRaw(payload));
+  const openModal = (payload: StateValue | null) =>
+    dispatch(openModalRaw(payload));
   const closeModal = () => dispatch(closeModalRaw());
 
   const addTransaction = (payload: TransactionValue) =>
