@@ -7,21 +7,21 @@ import {
   updateTransaction as updateTransactionRaw,
   deleteTransaction as deleteTransactionRaw,
   getTransactions as getTransactionsRaw,
-  TransactionValue,
-  StateValue,
+  TransactionData,
+  Transaction,
 } from 'core/store/slices/transactionSlice';
 import { useAppDispatch } from 'shared/hook';
 
 const useActions = () => {
   const dispatch = useAppDispatch();
 
-  const openModal = (payload: StateValue | null) =>
+  const openModal = (payload: Transaction | null) =>
     dispatch(openModalRaw(payload));
   const closeModal = () => dispatch(closeModalRaw());
 
-  const addTransaction = (payload: TransactionValue) =>
+  const addTransaction = (payload: TransactionData) =>
     dispatch(addTransactionRaw(payload));
-  const updateTransaction = (payload: StateValue) =>
+  const updateTransaction = (payload: Transaction) =>
     dispatch(updateTransactionRaw(payload));
   const getTransactions = () => dispatch(getTransactionsRaw());
   const deleteTransaction = (payload: string) =>

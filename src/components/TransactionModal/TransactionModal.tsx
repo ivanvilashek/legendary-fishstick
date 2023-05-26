@@ -1,8 +1,7 @@
-import dayjs from 'dayjs';
 import { Modal, List } from 'antd';
 import { CalendarOutlined, FormOutlined } from '@ant-design/icons';
 import { useAppSelector } from 'shared/hook';
-import { TransactionValue } from 'core/store/slices/transactionSlice';
+import { TransactionData } from 'core/store/slices/transactionSlice';
 import styles from './TransactionModal.module.scss';
 import { CategoryIcon } from 'components/CategoryIcon';
 import {
@@ -15,13 +14,9 @@ import {
 } from './components';
 import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
 import useActions from 'shared/hook/useActions';
-
-const initialValues = {
-  amount: null,
-  type: 'expense',
-  category: 'uncategorized',
-  description: '',
-};
+import { initialValues } from './constants/initialValues';
+import { useEffect } from 'react';
+import dayjs from 'dayjs';
 
 export const TransactionModal = () => {
   const { user, UI } = useAppSelector((state) => state);
@@ -29,19 +24,18 @@ export const TransactionModal = () => {
 
   const { closeModal, addTransaction, updateTransaction } = useActions();
 
-  const { control, setValue, handleSubmit, reset } = useForm<TransactionValue>({
-    defaultValues: { ...initialValues, date: dayjs().valueOf() },
+  const { control, setValue, handleSubmit, reset } = useForm<TransactionData>({
     values: transaction?.data,
   });
 
   const formValues = useWatch({ control });
 
-  const closeDialog = () => {
-    reset(initialValues);
-    closeModal();
-  };
+  useEffect(() => {
+    if (isOpen && transaction) return;
+    reset({ ...initialValues, date: +dayjs() });
+  }, [isOpen]);
 
-  const onSubmit: SubmitHandler<TransactionValue> = (data) => {
+  const onSubmit: SubmitHandler<TransactionData> = (data) => {
     if (!transaction) {
       addTransaction({
         ...data,
@@ -54,14 +48,14 @@ export const TransactionModal = () => {
       });
     }
 
-    closeDialog();
+    closeModal();
   };
 
   return (
     <Modal
       open={isOpen}
       onOk={handleSubmit(onSubmit)}
-      onCancel={closeDialog}
+      onCancel={closeModal}
       width={350}
       closable={false}
     >

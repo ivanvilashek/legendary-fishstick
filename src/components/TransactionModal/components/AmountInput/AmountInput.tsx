@@ -1,12 +1,8 @@
-import { Controller, Control } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { InputNumber } from 'antd';
-import { TransactionValue } from 'core/store/slices/transactionSlice';
+import { Props } from './types';
 
-interface PropsType {
-  control: Control<TransactionValue>;
-}
-
-export const AmountInput = ({ control }: PropsType) => {
+export const AmountInput = ({ control }: Props) => {
   return (
     <Controller
       name="amount"
@@ -16,6 +12,7 @@ export const AmountInput = ({ control }: PropsType) => {
         <InputNumber
           {...field}
           size="small"
+          autoFocus
           bordered={false}
           placeholder="Enter the amount"
           type="number"

@@ -1,26 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { StateValue, TransactionValue } from './transactionSlice';
-
-interface StateType {
-  modal: {
-    isOpen: boolean;
-    transaction?: StateValue | null;
-  };
-}
-
-const initialState: StateType = {
-  modal: {
-    isOpen: false,
-    transaction: null,
-  },
-};
+import { Transaction } from 'core/store/slices/transactionSlice';
+import { initialState } from './constants';
 
 const UISlice = createSlice({
   name: 'UI',
   initialState,
   reducers: {
-    openModal(state, action: PayloadAction<StateValue | null>) {
-      console.log(action);
+    openModal(state, action: PayloadAction<Transaction | null>) {
       state.modal = {
         isOpen: true,
         transaction: action.payload,

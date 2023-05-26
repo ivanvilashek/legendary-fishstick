@@ -10,26 +10,12 @@ import {
   doc,
   updateDoc,
 } from 'firebase/firestore';
-
-export interface TransactionValue {
-  amount: number | null;
-  type: string;
-  category: string;
-  date: number;
-  uid: string;
-  description: string;
-}
-
-export interface StateValue {
-  id: string;
-  data: TransactionValue;
-}
-
-const initialState: StateValue[] = [];
+import { Transaction, TransactionData } from './types';
+import { initialState } from './constants';
 
 export const addTransaction = createAsyncThunk(
   'transactions/addTransaction',
-  async (transaction: TransactionValue) => {
+  async (transaction: TransactionData) => {
     const transactionRef = await addDoc(
       collection(db, 'transactions'),
       transaction
@@ -41,7 +27,7 @@ export const addTransaction = createAsyncThunk(
 
 export const updateTransaction = createAsyncThunk(
   'transactions/updateTransaction',
-  async (editedTransaction: StateValue) => {
+  async (editedTransaction: Transaction) => {
     await updateDoc(doc(db, 'transactions', editedTransaction.id), {
       data: editedTransaction.data,
     });
@@ -67,7 +53,7 @@ export const getTransactions = createAsyncThunk(
     );
     const querySnapshot = await getDocs(q);
     const transactions = querySnapshot.docs.map(
-      (item) => ({ id: item.id, data: item.data() } as StateValue)
+      (item) => ({ id: item.id, data: item.data() } as Transaction)
     );
     return transactions;
   }

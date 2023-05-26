@@ -1,12 +1,12 @@
 import { Controller, Control } from 'react-hook-form';
 import { Input } from 'antd';
-import { TransactionValue } from 'core/store/slices/transactionSlice';
+import { TransactionData } from 'core/store/slices/transactionSlice';
 
-interface PropsType {
-  control: Control<TransactionValue>;
-}
+type Props = {
+  control: Control<TransactionData>;
+};
 
-export const DescriptionInput = ({ control }: PropsType) => {
+export const DescriptionInput = ({ control }: Props) => {
   return (
     <Controller
       name="description"

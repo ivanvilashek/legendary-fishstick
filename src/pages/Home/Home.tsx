@@ -2,7 +2,7 @@ import { Typography, Space, FloatButton, List } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import { useAppSelector } from 'shared/hook';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { StateValue } from 'core/store/slices/transactionSlice';
+import { Transaction } from 'core/store/slices/transactionSlice';
 import { CategoryIcon } from 'components/CategoryIcon';
 import useActions from 'shared/hook/useActions';
 
@@ -19,7 +19,7 @@ export const Home = () => {
 
   const addTransaction = () => openModal(null);
 
-  const onUpdate = (transaction: StateValue) => openModal(transaction);
+  const onUpdate = (transaction: Transaction) => openModal(transaction);
 
   const onDelete = (id: string) => deleteTransaction(id);
 

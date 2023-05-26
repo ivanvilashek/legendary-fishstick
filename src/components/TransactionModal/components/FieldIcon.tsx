@@ -1,14 +1,15 @@
 import { Avatar } from 'antd';
 
-interface PropsType {
+type Props = {
   value: any;
+  size?: number;
   icon?: JSX.Element;
   children?: JSX.Element | string;
-}
+};
 
-export const FieldIcon = ({ icon, value, children }: PropsType) => {
+export const FieldIcon = ({ icon, value, children, size = 35 }: Props) => {
   return (
-    <Avatar size={35} icon={icon} style={{ background: value && '#1677FF' }}>
+    <Avatar size={size} icon={icon} style={{ background: value && '#1677FF' }}>
       {children}
     </Avatar>
   );

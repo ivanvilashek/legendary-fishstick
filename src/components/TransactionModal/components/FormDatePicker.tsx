@@ -1,17 +1,18 @@
 import { Controller, Control } from 'react-hook-form';
 import { DatePicker } from 'antd';
-import { TransactionValue } from 'core/store/slices/transactionSlice';
+import { TransactionData } from 'core/store/slices/transactionSlice';
 import dayjs from 'dayjs';
 
-interface PropsType {
-  control: Control<TransactionValue>;
-}
+type Props = {
+  control: Control<TransactionData>;
+};
 
-export const FormDatePicker = ({ control }: PropsType) => {
+export const FormDatePicker = ({ control }: Props) => {
   return (
     <Controller
       name="date"
       control={control}
+      defaultValue={+dayjs()}
       render={({ field }) => (
         <DatePicker
           value={dayjs(field.value)}

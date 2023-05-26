@@ -1,16 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-interface UserType {
-  displayName: string | null;
-  email: string | null;
-  id: string | null;
-}
-
-const initialState: UserType = {
-  displayName: null,
-  email: null,
-  id: null,
-};
+import { initialState } from './constants';
 
 const userSlice = createSlice({
   name: 'user',
