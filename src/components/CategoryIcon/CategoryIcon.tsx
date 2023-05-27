@@ -1,12 +1,8 @@
 import { Avatar } from 'antd';
 import { categories } from 'components/TransactionModal/constants';
+import { Props } from './types';
 
-interface PropsType {
-  category: string;
-  type: string;
-}
-
-export const CategoryIcon = ({ category, type }: PropsType) => {
+export const CategoryIcon = ({ category, type }: Props) => {
   const selected = categories[type].find(
     (item: { value: string }) => item.value === category
   );

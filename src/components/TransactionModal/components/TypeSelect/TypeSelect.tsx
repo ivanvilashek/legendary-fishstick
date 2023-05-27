@@ -1,12 +1,7 @@
 import { Segmented } from 'antd';
-import { Controller, Control, UseFormSetValue } from 'react-hook-form';
-import { categories, segmentedOptions } from '../constants';
-import { TransactionData } from 'core/store/slices/transactionSlice';
-
-type Props = {
-  control: Control<TransactionData>;
-  setValue: UseFormSetValue<TransactionData>;
-};
+import { Controller } from 'react-hook-form';
+import { categories, segmentedOptions } from '../../constants';
+import { Props } from './types';
 
 export const TypeSelect = ({ control, setValue }: Props) => {
   return (

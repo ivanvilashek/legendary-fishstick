@@ -1,10 +1,6 @@
-import { Controller, Control } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { Input } from 'antd';
-import { TransactionData } from 'core/store/slices/transactionSlice';
-
-type Props = {
-  control: Control<TransactionData>;
-};
+import { Props } from './types';
 
 export const DescriptionInput = ({ control }: Props) => {
   return (

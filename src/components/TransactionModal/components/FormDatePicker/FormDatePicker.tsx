@@ -1,11 +1,7 @@
-import { Controller, Control } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { DatePicker } from 'antd';
-import { TransactionData } from 'core/store/slices/transactionSlice';
 import dayjs from 'dayjs';
-
-type Props = {
-  control: Control<TransactionData>;
-};
+import { Props } from './types';
 
 export const FormDatePicker = ({ control }: Props) => {
   return (
