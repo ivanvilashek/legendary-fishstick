@@ -1,17 +1,16 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Typography, message } from 'antd';
-import { ROUTES } from '../../constants';
-import { useAuth } from '../../hook';
+import { LockOutlined, UserOutlined, GoogleOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Space, Typography } from 'antd';
+import { ROUTES } from 'core/constants';
+import { useAuth } from 'shared/hook';
 import styles from './Login.module.scss';
 
 const { Title } = Typography;
 
 export const Login = () => {
-  const { signIn } = useAuth();
+  const { signIn, signInWithGoogle } = useAuth();
 
-  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -20,7 +19,6 @@ export const Login = () => {
 
   return (
     <div className="wrapper">
-      {contextHolder}
       <Form
         className="form"
         form={form}
@@ -60,13 +58,18 @@ export const Login = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button
-            className={styles.submitButton}
-            type="primary"
-            htmlType="submit"
-          >
-            Log in
-          </Button>
+          <Space.Compact block direction="vertical">
+            <Button type="primary" htmlType="submit">
+              Log in
+            </Button>
+            <Button
+              icon={<GoogleOutlined className="googleIcon" />}
+              type="default"
+              onClick={signInWithGoogle}
+            >
+              Sign in with Google
+            </Button>
+          </Space.Compact>
           Or <Link to={ROUTES.REGISTER}>register now!</Link>
           <Link to="" className={styles.forgotLink}>
             Forgot password

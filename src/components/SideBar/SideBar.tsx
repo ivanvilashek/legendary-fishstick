@@ -1,5 +1,5 @@
 import { Layout } from 'antd';
-import logo from '../../logo.svg';
+import logo from 'shared/assets/icons/logo.svg';
 import styles from './SideBar.module.scss';
 
 export const SideBar = ({ children }: React.PropsWithChildren) => {

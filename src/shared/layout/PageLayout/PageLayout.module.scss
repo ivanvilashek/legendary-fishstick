@@ -1,0 +1,9 @@
+.pageLayout {
+  min-height: 100vh;
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 30px 20px;
+  }
+}
