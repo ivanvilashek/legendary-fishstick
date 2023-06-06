@@ -1,0 +1,17 @@
+.Label {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+
+  div {
+    display: flex;
+    gap: 0.5rem;
+
+    div {
+      width: 0.25rem;
+      border-radius: 0.25rem;
+      background: black;
+    }
+  }
+}

@@ -33,7 +33,7 @@ export const TransactionModal = () => {
   useEffect(() => {
     if (isOpen && transaction) return;
     reset({ ...initialValues, date: +dayjs() });
-  }, [isOpen]);
+  }, [isOpen, reset, transaction]);
 
   const onSubmit: SubmitHandler<TransactionData> = (data) => {
     if (!transaction) {

@@ -1,5 +1,5 @@
 export type TransactionData = {
-  amount: number | null;
+  amount: number;
   type: string;
   category: string;
   date: number;

@@ -1,14 +1,13 @@
 import { Avatar } from 'antd';
-import { categories } from 'components/TransactionModal/constants';
 import { Props } from './types';
+import { getCategoryObj } from 'shared/helpers';
 
-export const CategoryIcon = ({ category, type }: Props) => {
-  const selected = categories[type].find(
-    (item: { value: string }) => item.value === category
-  );
+export const CategoryIcon = ({ category, type, size = 35 }: Props) => {
+  const selected = getCategoryObj(category, type);
+
   return (
     <Avatar
-      size={35}
+      size={size}
       icon={selected?.icon}
       style={{ background: selected?.color }}
     />

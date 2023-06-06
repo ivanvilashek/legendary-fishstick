@@ -1,22 +1,24 @@
 import { ImSpoonKnife, ImPencil, ImAirplane, ImGift } from 'react-icons/im';
 import { BsFillBriefcaseFill } from 'react-icons/bs';
-import { QuestionOutlined } from '@ant-design/icons';
 
-interface CategoryType {
-  [index: string]: {
-    value: string;
-    label: string;
-    icon?: React.ReactElement | string;
-    color?: string;
-  }[];
-}
+export type Category = {
+  value: string;
+  label: string;
+  icon: React.ReactElement | string;
+  color: string;
+};
 
-export const categories: CategoryType = {
+type Categories = {
+  [index: string]: Category[];
+};
+
+export const categories: Categories = {
   expense: [
     {
       value: 'uncategorized',
       label: 'Uncategorized expense',
       icon: '?',
+      color: '#bfbfbf',
     },
     {
       value: 'food',
