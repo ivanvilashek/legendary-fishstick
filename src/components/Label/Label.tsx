@@ -1,5 +1,4 @@
 import styles from './Label.module.scss';
-import { TotalByCategory } from 'shared/helpers';
 import { Props } from './types';
 
 export const Label = ({ category, color, total }: Props) => {
