@@ -1,2 +1,2 @@
 export { segmentedOptions } from './segmentedOptions';
-export { categories } from './categories';
+export * from './categories';

@@ -1,3 +1,14 @@
+import { filterTransactions } from 'shared/helpers';
+import { useAppSelector } from 'shared/hook';
+import { Graph } from 'components';
+
 export const Dashboard = () => {
-  return <h2>Dashboard</h2>;
+  const transactions = useAppSelector((state) => state.transactions);
+  const expenses = filterTransactions(transactions, 'expense');
+
+  return (
+    <>
+      <Graph data={expenses} />
+    </>
+  );
 };

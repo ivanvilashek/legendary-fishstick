@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { Layout } from 'antd';
 import { SideBar, NavBar, TopicMenu, TransactionModal } from 'components';
 import styles from './PageLayout.module.scss';
-import { useResponsive, useAppSelector } from 'shared/hook';
+import { useResponsive } from 'shared/hook';
 
 const { Content } = Layout;
 

@@ -1,5 +1,5 @@
 export type Props = {
   category: string;
-  type: string;
-  size?: number;
+  color: string;
+  total: number;
 };
